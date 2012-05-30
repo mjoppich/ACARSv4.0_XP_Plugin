@@ -1,3 +1,7 @@
 
 /SDK
 /SDK210Tests.pro.user
+/Debug
+/ipch
+/SDK210Tests.sdf
+/SDK210Tests.vcxproj.user
