@@ -69,10 +69,21 @@ char StringBuffer[256];
   int         remoteAddrLen=sizeof(SOCKADDR_IN);
 
 // Datarefs POSITION
-XPLMDataRef	xpLatitude = NULL;
-XPLMDataRef	xpLongitude = NULL;
-XPLMDataRef	xpAltitude = NULL;
-XPLMDataRef	xpAltitudeAboveGround = NULL;
+XPLMDataRef	xp_dLatitude = NULL;
+XPLMDataRef	xp_dLongitude = NULL;
+XPLMDataRef	xp_dAltitude = NULL;
+XPLMDataRef xp_fVertSpeed = NULL;
+XPLMDataRef xp_fHeading = NULL;
+
+// Datarefs SPEED
+XPLMDataRef	xp_fGroundSpeed = NULL;
+XPLMDataRef	xp_fIndicatedAirspeed = NULL;
+XPLMDataRef	xp_fMachSpeed = NULL;
+
+// Datarefs WEIGHT
+XPLMDataRef	xp_fPayloadWeight = NULL;
+XPLMDataRef	xp_fTotalWeight = NULL;
+XPLMDataRef	xp_fFuelTotalWeight = NULL;
 
 // Datarefs AC 
 
@@ -132,7 +143,7 @@ PLUGIN_API int XPluginStart(
 
     // addr vorbereiten
 	addr.sin_family=AF_INET;
-	addr.sin_port=htons(7777);
+	addr.sin_port=htons(49004);
 	addr.sin_addr.s_addr=inet_addr("127.0.0.1");
 
 	XPLMDebugString(outDesc);
@@ -141,10 +152,22 @@ PLUGIN_API int XPluginStart(
     // Register the callback for errors
     XPLMSetErrorCallback(SDK210TestsErrorCB);
 
-    // Datarefs to get the aicraft position
-    xpLatitude = XPLMFindDataRef("sim/flightmodel/position/local_x");
-    xpLongitude = XPLMFindDataRef("sim/flightmodel/position/local_y");
-    xpAltitude = XPLMFindDataRef("sim/flightmodel/position/local_z");
+    // Datarefs to get the aicraft position and speed
+    xp_dLatitude = XPLMFindDataRef("sim/flightmodel/position/latitude");
+    xp_dLongitude = XPLMFindDataRef("sim/flightmodel/position/longitude");
+    xp_dAltitude = XPLMFindDataRef("sim/flightmodel/position/elevation");
+	xp_fVertSpeed = XPLMFindDataRef("sim/flightmodel/position/vh_ind");
+	xp_fHeading = XPLMFindDataRef("sim/cockpit/misc/compass_indicated");
+
+	// Datarefs to get speeds
+	xp_fGroundSpeed = XPLMFindDataRef("sim/flightmodel/position/groundspeed");
+	xp_fIndicatedAirspeed = XPLMFindDataRef("sim/flightmodel/position/indicated_airspeed2");
+	xp_fMachSpeed = XPLMFindDataRef("sim/flightmodel/misc/machno");
+
+	// Datarefs to get aircraft weights
+	xp_fPayloadWeight = XPLMFindDataRef("sim/flightmodel/weight/m_fixed");
+	xp_fTotalWeight = XPLMFindDataRef("sim/flightmodel/weight/m_total");
+	xp_fFuelTotalWeight = XPLMFindDataRef("sim/flightmodel/weight/m_fuel_total");
 
     XPLMRegisterFlightLoopCallback(SDK210TestsMainLoopCB, 1.0, NULL);
 
@@ -190,17 +213,27 @@ PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, long inMsg, void * in
 float SDK210TestsMainLoopCB(float elapsedMe, float elapsedSim, int counter, void * refcon)
 {
 
-	sprintf(buf,"Du mich auch %i",counter);
+	double altitude = XPLMGetDatad(xp_dAltitude);
+	double latitude = XPLMGetDatad(xp_dLatitude);
+	double longitude = XPLMGetDatad(xp_dLongitude);
+	float vertspeed = XPLMGetDataf(xp_fVertSpeed);
+	float heading = XPLMGetDataf(xp_fHeading);
+
+	float groundspeed = XPLMGetDataf(xp_fGroundSpeed);
+	float indicatedairspeed = XPLMGetDataf(xp_fIndicatedAirspeed);
+	float machspeed = XPLMGetDataf(xp_fMachSpeed);
+
+	float payloadweight = XPLMGetDataf(xp_fPayloadWeight);
+	float totalweight = XPLMGetDataf(xp_fTotalWeight);
+	float fueltotalweight = XPLMGetDataf(xp_fFuelTotalWeight);
+
+
+	sprintf(buf,"%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%i;%f",altitude, latitude, longitude,vertspeed, groundspeed, indicatedairspeed, machspeed, payloadweight, totalweight, fueltotalweight, counter, heading);
 
     rc=sendto(s,buf,strlen(buf),0,(SOCKADDR*)&addr,sizeof(SOCKADDR_IN));
 
 	if(rc==SOCKET_ERROR)
     {
-      XPLMDebugString("nothing sent");
-    }
-    else
-    {
-		sprintf(buf,"%d Bytes gesendet in run %i !\n", rc, counter);
       XPLMDebugString(buf);
     }
 

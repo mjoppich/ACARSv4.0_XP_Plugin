@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDK210Tests", "SDK210Tests.vcxproj", "{EE7C4513-C086-23B8-5044-A574EC10554A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDK210Tests", "SDK210Tests.vcxproj", "{3323BEB7-2FAA-8DC0-3EFA-030E12F70FC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EE7C4513-C086-23B8-5044-A574EC10554A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EE7C4513-C086-23B8-5044-A574EC10554A}.Debug|Win32.Build.0 = Debug|Win32
-		{EE7C4513-C086-23B8-5044-A574EC10554A}.Release|Win32.ActiveCfg = Release|Win32
-		{EE7C4513-C086-23B8-5044-A574EC10554A}.Release|Win32.Build.0 = Release|Win32
+		{3323BEB7-2FAA-8DC0-3EFA-030E12F70FC3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3323BEB7-2FAA-8DC0-3EFA-030E12F70FC3}.Debug|Win32.Build.0 = Debug|Win32
+		{3323BEB7-2FAA-8DC0-3EFA-030E12F70FC3}.Release|Win32.ActiveCfg = Release|Win32
+		{3323BEB7-2FAA-8DC0-3EFA-030E12F70FC3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
