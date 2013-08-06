@@ -87,6 +87,10 @@ XPLMDataRef	xp_fFuelTotalWeight = NULL;
 
 // Datarefs AC 
 
+// Datarefs Time
+XPLMDataRef xp_fUTCTime = NULL;
+XPLMDataRef xp_fLCLTime = NULL;
+
 // Used by the FLCB test
 int	MainLoopCBCounter = 0;
 
@@ -169,6 +173,10 @@ PLUGIN_API int XPluginStart(
 	xp_fTotalWeight = XPLMFindDataRef("sim/flightmodel/weight/m_total");
 	xp_fFuelTotalWeight = XPLMFindDataRef("sim/flightmodel/weight/m_fuel_total");
 
+	//Datarefs TIME
+	xp_fUTCTime = XPLMFindDataRef("sim/time/zulu_time_sec");
+	xp_fLCLTime = XPLMFindDataRef("sim/time/local_time_sec");
+
     XPLMRegisterFlightLoopCallback(SDK210TestsMainLoopCB, 1.0, NULL);
 
     return 1;
@@ -227,8 +235,13 @@ float SDK210TestsMainLoopCB(float elapsedMe, float elapsedSim, int counter, void
 	float totalweight = XPLMGetDataf(xp_fTotalWeight);
 	float fueltotalweight = XPLMGetDataf(xp_fFuelTotalWeight);
 
+	float futctime = XPLMGetDataf(xp_fUTCTime);
+	float flcltime = XPLMGetDataf(xp_fLCLTime);
 
-	sprintf(buf,"%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%i;%f",altitude, latitude, longitude,vertspeed, groundspeed, indicatedairspeed, machspeed, payloadweight, totalweight, fueltotalweight, counter, heading);
+	//sprintf(buf,"%f\n%f", futctime, flcltime);
+	//XPLMDebugString(buf);
+
+	sprintf(buf,"%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%i;%f;%f;%f",altitude, latitude, longitude,vertspeed, groundspeed, indicatedairspeed, machspeed, payloadweight, totalweight, fueltotalweight, counter, heading, futctime, flcltime);
 
     rc=sendto(s,buf,strlen(buf),0,(SOCKADDR*)&addr,sizeof(SOCKADDR_IN));
 

@@ -17,9 +17,9 @@ DEFINES += XPLM210
 
 win32 {
     DEFINES += APL=0 IBM=1 LIN=0
-    LIBS += -L../XPlanePlugin/SDK/Libraries/Win
-    LIBS += -lXPLM -lXPWidgets
-    TARGET = win.xpl
+    LIBS += -L./SDK/Libraries/Win
+    LIBS += -lXPLM_64 -lXPWidgets_64
+    TARGET = acars40.xpl
 }
 
 unix:!macx {
